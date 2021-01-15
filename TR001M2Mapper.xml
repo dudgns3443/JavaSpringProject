@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bizentro.unierp.module.training.tr.tr001m2.service.impl.TR001M2Mapper">
+	
+	<select id="selectTR001M2" resultType="EgovMap" parameterType="TR001M2SearchVO">
+/*selectTR001M2*/		
+		SELECT    Z.TEST_NM
+				, Z.TEST_CD
+				, Z.BASIC_DT
+				, Z.START_DT
+				, Z.END_DT
+				, Z.INT_NUM
+				, Z.FLOAT_NUM
+				, Z.BASIC_COMBO
+				, Z.BASIC_COMBO_CODE
+				, B.LANG_NM AS BASIC_COMBO_NAME
+				, Z.CUSTOM_COMBO
+				, Z.UPPER_COMBO
+				, Z.LOWER_COMBO
+				, Z.ZIP_CODE
+				, Z.ADDR1
+				, Z.ADDR2
+				, Z.REMARK_TXT
+				, Z.TENANT_ID
+				, Z.USE_YN
+				, Z.CO_CD
+		FROM Z_TRAINING_MAST Z <include refid="common.sql.nolock"/>
+		LEFT OUTER JOIN B_LANGUAGE B <include refid="common.sql.nolock"/>  
+		        ON B.TENANT_ID = Z.TENANT_ID
+		        AND B.CO_CD     = Z.CO_CD
+		        AND B.LANG_CD   = Z.BASIC_COMBO_CODE
+		WHERE Z.CO_CD = #{coCdSearch}
+			<if test="testNmSearch !=null and testNmSearch !=''">
+			AND TEST_NM LIKE <include refid="common.sql.owner"/>ufn_utils_concat('%',<include refid="common.sql.owner"/>ufn_utils_concat(#{testNmSearch},'%'))
+			</if>				
+	</select>
+	
+	<insert id="insertTR001M2" parameterType="TR001M2GridListVO">
+	/*insertTR001M2*/
+
+		INSERT INTO Z_TRAINING_MAST  (
+			TENANT_ID
+		  , CO_CD
+		  , TEST_CD
+		  , TEST_NM
+		  , BASIC_DT
+		  , START_DT
+		  , END_DT
+		  , INT_NUM
+		  , FLOAT_NUM
+		  , USE_YN
+		  , BASIC_COMBO
+		  , BASIC_COMBO_CODE
+		  , MULTI_COMBO
+		  , CUSTOM_COMBO
+		  , UPPER_COMBO
+		  , LOWER_COMBO
+		  , REMARK_TXT
+		  , ZIP_CODE
+		  , ADDR1
+		  , ADDR2
+		  , INSRT_USER_ID
+		  , INSRT_DT
+		  , UPDT_USER_ID
+		  , UPDT_DT
+		  , SP_NM
+		  , IP_ADDR
+		  , CLIENT_ID
+		  , PGM_ID
+		)
+		VALUES 
+		(
+			 #{tenantId}
+			, #{coCd}
+			, #{testCd}
+			, #{testNm}
+			, #{basicDt}
+			, #{startDt}
+			, #{endDt}
+			, #{intNum}
+			, #{floatNum}
+			, #{useYn}
+			, #{basicCombo}
+			, #{basicComboCode}
+			, #{multiCombo}
+			, #{customCombo}
+			, #{upperCombo}
+			, #{lowerCombo}
+			, #{remarkTxt}
+			, #{zipCode}
+			, #{addr1}
+			, #{addr2}
+			, #{insrtUserId}
+			, <include refid="common.sql.owner"/>ufn_utils_getdate()
+			, #{updtUserId}
+			, <include refid="common.sql.owner"/>ufn_utils_getdate()
+			, #{spNm}
+			, #{ipAddr}
+			, #{clientId}
+			, #{pgmId}
+		)
+		
+	</insert>
+	<delete  id="deleteTR001M2" parameterType="TR001M2GridListVO">
+	/*deleteTR001M2*/
+	DELETE FROM Z_TRAINING_MAST 
+	WHERE TENANT_ID = #{tenantId}
+		AND CO_CD = #{coCd}
+		AND TEST_CD = #{testCd} 
+	</delete>
+	
+	<update id="updateTR001M2" parameterType="TR001M2GridListVO">
+	/*updateTR001M2*/
+	UPDATE Z_TRAINING_MAST
+	SET		TEST_NM	= #{testNm}
+		  , BASIC_DT	= #{basicDt}
+		  , START_DT	= #{startDt}
+		  , END_DT	= #{endDt}
+		  , INT_NUM	= #{intNum}
+		  , FLOAT_NUM	= #{floatNum}
+		  , USE_YN	= #{useYn}
+		  , BASIC_COMBO	= #{basicCombo}
+		  , BASIC_COMBO_CODE	= #{basicComboCode}
+		  , CUSTOM_COMBO	= #{customCombo}
+		  , UPPER_COMBO	= #{upperCombo}
+		  , LOWER_COMBO	= #{lowerCombo}
+		  , REMARK_TXT	= #{remarkTxt}
+		  , ZIP_CODE	= #{zipCode}
+		  , ADDR1	= #{addr1}
+		  , ADDR2	= #{addr2}
+		  , UPDT_USER_ID	= #{updtUserId}
+		  , UPDT_DT	= <include refid="common.sql.owner"/>ufn_utils_getdate()
+	WHERE TENANT_ID = #{tenantId}
+		AND CO_CD = #{coCd}
+		AND TEST_CD = #{testCd} 
+	
+	</update>
+</mapper>
